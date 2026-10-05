@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ChemieAssistent.Domain/ChemieAssistent.Domain.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ChemieAssistent.Domain.Tests/ChemieAssistent.Domain.Tests.csproj" />
+  </Folder>
+</Solution>
