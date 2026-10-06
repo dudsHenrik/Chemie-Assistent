@@ -10,7 +10,7 @@ public static class Tokenizador
             char c = f[pos];
             if (pos == 0 && char.IsDigit(c))
             {
-                if (pos < f.Length && char.IsDigit(f[pos])) //pos++;
+                if (pos < f.Length && char.IsDigit(f[pos]))
                 {
                     string coeficiente = LerDigitos(f, ref pos);
                     tokens.Add(new Token(TipoToken.Coeficiente, coeficiente, pos - coeficiente.Length));
