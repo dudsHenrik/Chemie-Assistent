@@ -6,7 +6,12 @@ public enum CodigoErro
     CaractereInvalido,
     ParentesesDesbalanceados,
     ElementoInexistente,
-    CompostoInvalido
+    CompostoInvalido,
+    SetaAusente,
+    SetaDuplicada,
+    ReagenteAusente,
+    ProdutoAusente,
+    CompostoAusente
 }
 
 public sealed class DominioException : Exception
