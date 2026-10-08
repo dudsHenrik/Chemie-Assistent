@@ -2,17 +2,21 @@
 
 public enum CodigoErro
 {
-    FormulaVazia,
     CaractereInvalido,
-    ParentesesDesbalanceados,
-    ElementoInexistente,
-    CompostoInvalido,
-    SetaAusente,
-    SetaDuplicada,
-    ReagenteAusente,
-    ProdutoAusente,
     CompostoAusente,
-    QuantidadeInvalida
+    CompostoInvalido,
+    ElementoInexistente,
+    ElementosDivergentes,
+    EquacaoIndeterminada,
+    FormulaVazia,
+    ParentesesDesbalanceados,
+    ProdutoAusente,
+    QuantidadeInvalida,
+    ReagenteAusente,
+    SemSolucao,
+    SetaAusente,
+    SetaDuplicada
+
 }
 
 public sealed class DominioException : Exception
