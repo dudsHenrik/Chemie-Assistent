@@ -2,90 +2,141 @@
 
 public static class ParserFormula
 {
-    public static IReadOnlyDictionary<string, int> Ler(string formula)
+    public static Composto Ler(string formula)
     {
         if (string.IsNullOrWhiteSpace(formula))
             throw new DominioException(CodigoErro.FormulaVazia, "Fórmula vazia.");
 
-        int pos = 0;
-        return LerGrupo(formula.Trim(), ref pos, aninhado: false);
+        string texto = formula.Trim();
+        List<Token> tokens = Tokenizador.Ler(texto);
+        return Interpretar(texto, tokens);
     }
 
-    // Lê átomos até o fim da fórmula ou até o ')' que fecha o grupo atual.
-    private static Dictionary<string, int> LerGrupo(string f, ref int pos, bool aninhado)
+    public static Composto Interpretar(string texto, List<Token> tokens)
     {
-        var contagem = new Dictionary<string, int>();
-        int mol = 1;
+        int coeficiente = 1;
+        int coeficienteHidrato = 1;
 
-        while (pos < f.Length)
+        var principal = new Dictionary<string, int>();
+        var atual = principal;
+        var pilha = new Stack<(Dictionary<string, int> Atomos, TipoToken Abertura)>();
+        bool emHidrato = false;
+
+        for (int i = 0; i < tokens.Count; i++)
         {
-            char c = f[pos];
-            if (char.IsDigit(c))
+            Token t = tokens[i];
+
+            switch (t.Tipo)
             {
-                mol = LerNumero(f, ref pos);
-                pos++;
-            }
-            else if (c == '(')
-            {
-                pos++;
-                var interno = LerGrupo(f, ref pos, aninhado: true); // consome até o ')'
-                int multiplicador = LerNumero(f, ref pos);
-                foreach (var (simbolo, qtd) in interno)
-                    Somar(contagem, simbolo, qtd * multiplicador);
-                if (interno == null)
-                    throw new DominioException(CodigoErro.FormulaVazia, 
-                        "Grupo inválido.");
-            }
-            else if (c == ')')
-            {
-                if (!aninhado)
-                    throw new DominioException(CodigoErro.ParentesesDesbalanceados,
-                        "Parêntese fechado sem abertura.");
-                if (LerGrupo(f, ref pos, aninhado: false) == null)
-                    throw new DominioException(CodigoErro.ParentesesDesbalanceados, 
-                        "Grupo inválido.");
-                pos++;
-                return contagem;
-            }
-            else if (char.IsUpper(c))
-            {
-                int inicio = pos++;
-                if (pos < f.Length && char.IsLower(f[pos])) pos++;   // símbolo: 1 maiúscula + 0 ou 1 minúscula
-                string simbolo = f[inicio..pos];
-                Somar(contagem, simbolo, LerNumero(f, ref pos));
-            }
-            else
-            {
-                throw new DominioException(CodigoErro.CaractereInvalido,
-                    $"Caractere inválido '{c}' na posição {pos + 1}.");
+                case TipoToken.Coeficiente:
+                    coeficiente = ValidarQuantidade(t);
+                    break;
+
+                case TipoToken.Simbolo:
+                    {
+                        int quantidade = 1;
+
+                        if (i + 1 < tokens.Count && tokens[i + 1].Tipo == TipoToken.IndiceInterno)
+                        {
+                            quantidade = ValidarQuantidade(tokens[i + 1]);
+                            i++; // consumiu o índice
+                        }
+
+                        Somar(atual, t.Texto, quantidade);
+                        break;
+                    }
+
+                case TipoToken.AbreParenteses:
+                case TipoToken.AbreColchete:
+                    pilha.Push((atual, t.Tipo));
+                    atual = new Dictionary<string, int>();
+                    break;
+
+                case TipoToken.FechaParenteses:
+                case TipoToken.FechaColchete:
+                    {
+                        if (pilha.Count == 0)
+                            throw new DominioException(CodigoErro.ParentesesDesbalanceados, "Fechamento sem abertura.");
+
+                        var grupo = atual;
+                        (atual, TipoToken abertura) = pilha.Pop();
+
+                        bool combina = (t.Tipo == TipoToken.FechaParenteses && abertura == TipoToken.AbreParenteses)
+                                    || (t.Tipo == TipoToken.FechaColchete && abertura == TipoToken.AbreColchete);
+
+                        if (!combina)
+                            throw new DominioException(CodigoErro.ParentesesDesbalanceados, "Parênteses e colchetes cruzados.");
+
+                        int indice = 1;
+
+                        if (i + 1 < tokens.Count && tokens[i + 1].Tipo == TipoToken.IndiceExterno)
+                        {
+                            indice = ValidarQuantidade(tokens[i + 1]);
+                            i++; // consumiu o índice
+                        }
+                        else if (t.Tipo == TipoToken.FechaParenteses)
+                        {
+                            throw new DominioException(CodigoErro.ParentesesDesbalanceados, "Parênteses sem índice.");
+                        }
+
+                        Mesclar(atual, grupo, indice);
+                        break;
+                    }
+
+                case TipoToken.Hidrato:
+                    {
+                        if (pilha.Count > 0 || emHidrato)
+                            throw new DominioException(CodigoErro.ParentesesDesbalanceados, "Hidrato em posição inválida.");
+
+                        if (i + 1 < tokens.Count && tokens[i + 1].Tipo == TipoToken.CoeficienteHidrato)
+                        {
+                            coeficienteHidrato = ValidarQuantidade(tokens[i + 1]);
+                            i++;
+                        }
+
+                        emHidrato = true;
+                        atual = new Dictionary<string, int>(); // átomos da água de hidratação
+                        break;
+                    }
+
+                default:
+                    throw new DominioException(CodigoErro.FormulaVazia, $"Token inesperado: {t.Texto}");
             }
         }
 
-        if (aninhado)
-            throw new DominioException(CodigoErro.ParentesesDesbalanceados,
-                "Parêntese aberto sem fechamento.");
+        if (pilha.Count > 0)
+            throw new DominioException(CodigoErro.ParentesesDesbalanceados, "Parênteses ou colchetes não fechados.");
 
-        return contagem;
+        if (emHidrato)
+            Mesclar(principal, atual, coeficienteHidrato);
+
+        // Opção A: átomos por unidade de fórmula; o coeficiente fica separado
+        return new Composto(texto, coeficiente, coeficienteHidrato, principal);
     }
 
-    // Lê dígitos consecutivos; se não houver, o valor é 1 (ex.: "O" = 1 átomo).
-    private static int LerNumero(string f, ref int pos)
+    private static int ValidarQuantidade(Token t)
     {
-        int inicio = pos;
-        while (pos < f.Length && char.IsDigit(f[pos])) pos++;
-        if (pos == inicio) return 1;
+        string valor = t.Texto;
 
-        string texto = f[inicio..pos];
-        if (texto == "0")
-            throw new DominioException(CodigoErro.CompostoInvalido,
-                   $"Quantidade inválida '0' na posição {pos}.");
-        if (texto == "1")
-            throw new DominioException(CodigoErro.CompostoInvalido,
-                $"Quantidade inválida '1' na posição {pos}.");
+        if (valor.StartsWith('0'))
+            throw new DominioException(CodigoErro.QuantidadeInvalida, $"Quantidade inválida: {valor}");
 
-        return int.Parse(texto);
+        if (valor == "1")
+            throw new DominioException(CodigoErro.QuantidadeInvalida, $"Quantidade {valor} é implícita e deve ser omitida");
+
+        return int.TryParse(valor, out int result)
+            ? result
+            : throw new DominioException(CodigoErro.QuantidadeInvalida, $"Quantidade inválida: {valor}");
     }
 
-    private static void Somar(Dictionary<string, int> d, string simbolo, int qtd)
-        => d[simbolo] = d.GetValueOrDefault(simbolo) + qtd;
+    private static void Somar(Dictionary<string, int> d, string simbolo, int quantidade)
+    {
+        d[simbolo] = d.GetValueOrDefault(simbolo) + quantidade;
+    }
+
+    private static void Mesclar(Dictionary<string, int> destino, Dictionary<string, int> origem, int fator)
+    {
+        foreach (var (simbolo, quantidade) in origem)
+            Somar(destino, simbolo, quantidade * fator);
+    }
 }

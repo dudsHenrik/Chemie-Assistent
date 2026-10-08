@@ -11,7 +11,8 @@ public enum CodigoErro
     SetaDuplicada,
     ReagenteAusente,
     ProdutoAusente,
-    CompostoAusente
+    CompostoAusente,
+    QuantidadeInvalida
 }
 
 public sealed class DominioException : Exception
