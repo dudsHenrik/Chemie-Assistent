@@ -3,17 +3,20 @@
 public static class Balanceador
 {
     public static Equacao Balancear(Equacao eq)
+    => BalancearEVerificar(eq).Equacao;
+
+    public static ResultadoBalanceamento BalancearEVerificar(Equacao eq)
     {
         var todos = eq.Reagentes.Concat(eq.Produtos).ToList();
         int qtdReagentes = eq.Reagentes.Count;
 
         VerificarDivergencia(eq);
         var elementos = ListarElementos(todos);
-
         var m = MontarMatriz(todos, qtdReagentes, elementos);
         var pivos = Escalonar(m);
-
         int[] coef = ExtrairCoeficientes(m, pivos, todos.Count);
+
+        var (situacao, divergencias) = VerificarDigitados(todos, coef);
 
         var reagentes = new List<Composto>();
         var produtos = new List<Composto>();
@@ -28,7 +31,7 @@ public static class Balanceador
                 produtos.Add(composto);
         }
 
-        return new Equacao(reagentes, produtos, eq.Reversivel);
+        return new ResultadoBalanceamento(new Equacao(reagentes, produtos, eq.Reversivel), situacao, divergencias);
     }
 
     private static void VerificarDivergencia(Equacao eq)
@@ -169,4 +172,37 @@ public static class Balanceador
         
         return coeficientes;
     }
+
+    private static (SituacaoCoeficientes, List<Divergencia>) VerificarDigitados(List<Composto> todos, int[] esperado)
+    {
+        int[] digitado = todos.Select(c => c.Coeficiente).ToArray();
+        var divergencias = new List<Divergencia>();
+
+        if (digitado.All(d => d == 1))
+            return (SituacaoCoeficientes.NaoInformados, divergencias);
+
+        if (digitado.SequenceEqual(esperado))
+            return (SituacaoCoeficientes.Corretos, divergencias);
+
+        if (EhProporcional(digitado, esperado))
+            return (SituacaoCoeficientes.Proporcionais, divergencias);
+
+        for (int i = 0; i < todos.Count; i++)
+            if (digitado[i] != esperado[i])
+                divergencias.Add(new Divergencia(
+                    i, SemCoeficiente(todos[i].Texto), digitado[i], esperado[i]));
+
+        return (SituacaoCoeficientes.Incorretos, divergencias);
+    }
+
+    private static bool EhProporcional(int[] a, int[] b)
+    {
+        for (int i = 1; i < a.Length; i++)
+            if ((long)a[i] * b[0] != (long)a[0] * b[i])
+                return false;
+        return true;
+    }
+
+    private static string SemCoeficiente(string texto)
+        => texto.TrimStart("0123456789".ToCharArray());
 }
