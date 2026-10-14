@@ -1,4 +1,4 @@
-﻿using ChemieAssistent.Domain;
+﻿namespace ChemieAssistent.Domain;
 
 public sealed class Estequiometria
 {
@@ -6,6 +6,37 @@ public sealed class Estequiometria
 
     public Estequiometria(CalculadoraMassaMolar massaMolar)
         => _massaMolar = massaMolar;
+
+    public enum UnidadeMassa
+    {
+        Grama,
+        Quilograma
+    }
+
+    public sealed record EntradaMassa(
+        int IndiceComposto,
+        decimal Valor,
+        UnidadeMassa Unidade);
+
+    public sealed record LinhaResultado(
+        Composto Composto,
+        bool EhReagente,
+        decimal MassaMolar,
+        decimal Mols,
+        decimal MassaGramas);
+
+    public sealed record LinhaLimitante(
+        Composto Composto,
+        bool EhReagente,
+        decimal MassaMolar,
+        decimal Mols,
+        decimal MassaGramas,
+        decimal ExcedenteMols,
+        decimal ExcedenteGramas);
+
+    public sealed record ResultadoLimitante(
+        int IndiceLimitante,
+        List<LinhaLimitante> Linhas);
 
     public List<LinhaResultado> Calcular(Equacao eq, EntradaMassa entrada)
     {
@@ -49,37 +80,6 @@ public sealed class Estequiometria
         } 
         return resultados;
     }
-
-    public enum UnidadeMassa 
-    { 
-        Grama, 
-        Quilograma 
-    }
-
-    public sealed record EntradaMassa(
-        int IndiceComposto, 
-        decimal Valor, 
-        UnidadeMassa Unidade);
-
-    public sealed record LinhaResultado(
-        Composto Composto, 
-        bool EhReagente, 
-        decimal MassaMolar, 
-        decimal Mols, 
-        decimal MassaGramas);
-
-    public sealed record LinhaLimitante(
-        Composto Composto,
-        bool EhReagente,
-        decimal MassaMolar,
-        decimal Mols,
-        decimal MassaGramas,
-        decimal ExcedenteMols,
-        decimal ExcedenteGramas);
-
-    public sealed record ResultadoLimitante(
-        int IndiceLimitante,
-        List<LinhaLimitante> Linhas);
 
     public ResultadoLimitante CalcularLimitante(Equacao eq, IReadOnlyList<EntradaMassa> entradas)
     {

@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace  ChemieAssistent.Domain;
+﻿namespace  ChemieAssistent.Domain;
 
 public static class Balanceador
 {
@@ -33,6 +31,19 @@ public static class Balanceador
         return new Equacao(reagentes, produtos, eq.Reversivel);
     }
 
+    private static void VerificarDivergencia(Equacao eq)
+    {
+        var esquerda = eq.Reagentes.SelectMany(c => c.Atomos.Keys).ToHashSet();
+        var direita = eq.Produtos.SelectMany(c => c.Atomos.Keys).ToHashSet();
+
+        if (!esquerda.SetEquals(direita))
+            throw new DominioException(CodigoErro.ElementosDivergentes,
+                "Há elementos que aparecem em apenas um lado da equação.");
+    }
+
+    private static List<string> ListarElementos(List<Composto> todos)
+    => todos.SelectMany(c => c.Atomos.Keys).Distinct().ToList();
+
     private static Fracao[,] MontarMatriz(List<Composto> todos, int qtdReagentes, List<string> elementos)
     {
         var m = new Fracao[elementos.Count, todos.Count];
@@ -46,11 +57,12 @@ public static class Balanceador
 
         return m;
     }
+   
     private static List<int> Escalonar(Fracao[,] m)
     {
         int linhas = m.GetLength(0);
         int colunas = m.GetLength(1);
-        var pivos = new List<int>(); 
+        var pivos = new List<int>();
         int l = 0;
 
         for (int c = 0; c < colunas && l < linhas; c++)
@@ -77,18 +89,18 @@ public static class Balanceador
 
             Fracao pivo = m[l, c];
 
-            for (int j = 0; j < colunas; j++) 
+            for (int j = 0; j < colunas; j++)
                 m[l, j] = m[l, j] / pivo;
 
-            for (int i = 0; i < linhas; i++) 
-            { 
-                if (i == l || m[i, c].EhZero) 
-                    continue; 
+            for (int i = 0; i < linhas; i++)
+            {
+                if (i == l || m[i, c].EhZero)
+                    continue;
 
-                Fracao fator = m[i, c]; 
-                
-                for (int j = 0; j < colunas; j++) 
-                    m[i, j] = m[i, j] - fator * m[l, j]; 
+                Fracao fator = m[i, c];
+
+                for (int j = 0; j < colunas; j++)
+                    m[i, j] = m[i, j] - fator * m[l, j];
             }
 
             pivos.Add(c);
@@ -97,18 +109,7 @@ public static class Balanceador
 
         return pivos;
     }
-    private static List<string> ListarElementos(List<Composto> todos)
-    => todos.SelectMany(c => c.Atomos.Keys).Distinct().ToList();
 
-    private static void VerificarDivergencia(Equacao eq)
-    {
-        var esquerda = eq.Reagentes.SelectMany(c => c.Atomos.Keys).ToHashSet();
-        var direita = eq.Produtos.SelectMany(c => c.Atomos.Keys).ToHashSet();
-
-        if (!esquerda.SetEquals(direita))
-            throw new DominioException(CodigoErro.ElementosDivergentes,
-                "Há elementos que aparecem em apenas um lado da equação.");
-    }
     private static int[] ExtrairCoeficientes(Fracao[,] m, List<int> pivos, int colunas)
     {
         int qtdLivres = colunas - pivos.Count;

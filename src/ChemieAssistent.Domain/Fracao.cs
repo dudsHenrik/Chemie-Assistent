@@ -26,11 +26,18 @@ public readonly record struct Fracao
         => new Fracao(checked(a.Numerador * b.Denominador + b.Numerador * a.Denominador), checked(a.Denominador * b.Denominador));
     public static Fracao operator -(Fracao a, Fracao b)
             => new Fracao(checked(a.Numerador * b.Denominador - b.Numerador * a.Denominador), checked(a.Denominador * b.Denominador));
-
     public static Fracao operator *(Fracao a, Fracao b) 
     => new Fracao(checked(a.Numerador * b.Numerador), checked(a.Denominador * b.Denominador));
-    public static Fracao operator /(Fracao a, Fracao b) 
-    => new Fracao(checked(a.Numerador * b.Denominador), checked(a.Denominador * b.Numerador));
+    public static Fracao operator /(Fracao a, Fracao b)
+    {
+        if (b.EhZero)
+            throw new DivideByZeroException(
+                "Não é possível dividir por uma fração igual a zero.");
+
+        return new(
+            checked(a.Numerador * b.Denominador), 
+            checked(a.Denominador * b.Numerador));
+    }
 
     public bool EhZero => Numerador == 0;
     public bool EhPositivo => Numerador > 0;
