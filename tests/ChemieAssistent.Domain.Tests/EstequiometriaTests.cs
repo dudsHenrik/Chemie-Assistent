@@ -1,7 +1,7 @@
-﻿using ChemieAssistent.Domain;
-using static Estequiometria;
+﻿namespace ChemieAssistent.Domain.Tests;
 
-namespace ChemieAssistent.Domain.Tests;
+using ChemieAssistent.Domain;
+using static Estequiometria;
 
 public class EstequiometriaTests
 {
@@ -20,6 +20,7 @@ public class EstequiometriaTests
         => linhas.Sum(l => l.MassaGramas);
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void Propano_88_194g_gera_mols_e_massas_esperados()
     {
         var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
@@ -43,6 +44,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void Massa_se_conserva_entre_reagentes_e_produtos()
     {
         var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
@@ -57,6 +59,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void Um_quilo_e_mil_gramas_dao_o_mesmo_resultado()
     {
         var eq = Balanceada("Fe + O2 -> Fe2O3");
@@ -69,6 +72,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void Um_quilo_de_ferro_gera_as_massas_esperadas()
     {
         var eq = Balanceada("Fe + O2 -> Fe2O3");
@@ -81,6 +85,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void Composto_informado_pode_ser_um_produto()
     {
         var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
@@ -93,6 +98,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void Hidrato_gera_agua_na_proporcao_correta()
     {
         var eq = Balanceada("CuSO4*5H2O -> CuSO4 + H2O");
@@ -107,6 +113,7 @@ public class EstequiometriaTests
     }
 
     [Theory]
+    [Trait("Categoria", "Validacao")]
     [InlineData(0)]
     [InlineData(-5)]
     public void Massa_nao_positiva_lanca_QuantidadeInvalida(double valor)
@@ -120,6 +127,7 @@ public class EstequiometriaTests
     }
 
     [Theory]
+    [Trait("Categoria", "Validacao")]
     [InlineData(-1)]
     [InlineData(4)]
     [InlineData(9)]
@@ -134,6 +142,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Limitante")]
     public void Identifica_o_limitante_e_o_excedente()
     {
         var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
@@ -152,6 +161,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Limitante")]
     public void Massa_se_conserva_no_limitante()
     {
         var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
@@ -168,6 +178,7 @@ public class EstequiometriaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Validacao")]
     public void Mistura_de_reagente_e_produto_lanca_EntradaInvalida()
     {
         var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");

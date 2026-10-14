@@ -1,8 +1,11 @@
 ﻿using ChemieAssistent.Domain;
 
+namespace ChemieAssistent.Domain.Tests;
+
 public class InterpretadorEquacaoTests
 {
     [Theory]
+    [Trait("Categoria", "Interpretar")]
     [InlineData("2H2 + O2 -> 2H2O", 2, 2, 1, 1, false)]
     [InlineData("4Fe + 3O2 -> 2Fe2O3", 2, 4, 3, 3, false)]
     public void LeEquacaoCompleta(
@@ -23,6 +26,7 @@ public class InterpretadorEquacaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Interpretar")]
     [InlineData("2N2 + 3H2 <-> 2NH3", true)]
     [InlineData("NH4Cl <-> NH3 + HCl", true)]
     [InlineData("CO2 + H2O <-> H2CO3", true)]

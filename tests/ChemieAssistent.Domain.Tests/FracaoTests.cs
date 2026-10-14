@@ -1,8 +1,11 @@
 ﻿using ChemieAssistent.Domain;
 
+namespace ChemieAssistent.Domain.Tests;
+
 public class FracaoTests
 {
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData(2, 4, 1, 2)]
     [InlineData(6, 9, 2, 3)]
     [InlineData(10, 5, 2, 1)]
@@ -20,6 +23,7 @@ public class FracaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData(1, -2, -1, 2)]
     [InlineData(-1, -2, 1, 2)]
     [InlineData(-2, 4, -1, 2)]
@@ -36,6 +40,7 @@ public class FracaoTests
     }
 
     [Fact]
+    [Trait("Categoria", "Validacao")]
     public void Deve_LancarExcecao_QuandoDenominadorForZero()
     {
         var excecao = Assert.Throws<ArgumentException>(
@@ -45,6 +50,7 @@ public class FracaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData(1, 2, -1, 2)]
     [InlineData(-1, 2, 1, 2)]
     [InlineData(3, 4, -3, 4)]
@@ -65,6 +71,7 @@ public class FracaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData(1, 2, 1, 3, 5, 6)]
     [InlineData(1, 2, 1, 2, 1, 1)]
     [InlineData(2, 3, 1, 6, 5, 6)]
@@ -88,6 +95,7 @@ public class FracaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData(1, 2, 1, 3, 1, 6)]
     [InlineData(1, 2, 1, 2, 0, 1)]
     [InlineData(2, 3, 1, 6, 1, 2)]
@@ -110,6 +118,7 @@ public class FracaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData(1, 2, 2, 3, 1, 3)]
     [InlineData(2, 3, 3, 4, 1, 2)]
     [InlineData(-1, 2, 2, 3, -1, 3)]
@@ -133,6 +142,7 @@ public class FracaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData(1, 2, 2, 3, 3, 4)]
     [InlineData(2, 3, 1, 6, 4, 1)]
     [InlineData(-1, 2, 2, 3, -3, 4)]
@@ -154,8 +164,8 @@ public class FracaoTests
             resultado);
     }
 
-
     [Theory]
+    [Trait("Categoria", "Identificacao")]
     [InlineData(0, 5, true)]
     [InlineData(0, 1, true)]
     [InlineData(1, 5, false)]
@@ -171,6 +181,7 @@ public class FracaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Identificacao")]
     [InlineData(1, 5, true)]
     [InlineData(5, 1, true)]
     [InlineData(-1, 5, false)]

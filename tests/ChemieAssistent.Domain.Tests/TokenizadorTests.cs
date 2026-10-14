@@ -1,8 +1,11 @@
 ﻿using ChemieAssistent.Domain;
 
+namespace ChemieAssistent.Domain.Tests;
+
 public class TokenizadorTests
 {
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void CaOH2_ViraSeisTokens()
     {
         var tokens = Tokenizador.Ler("Ca(OH)2");
@@ -13,6 +16,7 @@ public class TokenizadorTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void H2O_ViraQuatroTokens()
     {
         var tokens = Tokenizador.Ler("2H2O");
@@ -23,6 +27,7 @@ public class TokenizadorTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void CuSO4_5H20_ViraNoveTokens()
     {
         var tokens = Tokenizador.Ler("CuSO4*5H2O");
@@ -32,6 +37,7 @@ public class TokenizadorTests
     }
 
     [Fact]
+    [Trait("Categoria", "Calculo")]
     public void CuSO4_H20_ViraOitoTokens()
     {
         var tokens = Tokenizador.Ler("CuSO4*H2O");

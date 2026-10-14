@@ -1,14 +1,16 @@
 ﻿using ChemieAssistent.Domain;
 
+namespace ChemieAssistent.Domain.Tests;
+
 public class ParserFormulaTests
 {
     [Theory]
-    [InlineData("Fe2O3", 1, new string[] { "Fe", "O" }, new int[] { 2, 3 })]
-    [InlineData("H2O", 1, new string[] { "H", "O" }, new int[] { 2, 1 })]
-    [InlineData("CO2", 1, new string[] { "C", "O" }, new int[] { 1, 2 })]
+    [Trait("Categoria", "Interpretar")]
+    [InlineData("Fe2O3", new string[] { "Fe", "O" }, new int[] { 2, 3 })]
+    [InlineData("H2O", new string[] { "H", "O" }, new int[] { 2, 1 })]
+    [InlineData("CO2", new string[] { "C", "O" }, new int[] { 1, 2 })]
     public void InterpretarFormulaSimples(
         string formula,
-        int coeficienteEsperado,
         string[] simbolosEsperados,
         int[] quantidadesEsperadas)
     {
@@ -25,6 +27,7 @@ public class ParserFormulaTests
     }
 
     [Theory]
+    [Trait("Categoria", "Interpretar")]
     [InlineData("[Cu(NH3)4]SO4*H2O", 1, new string[] { "Cu", "N", "H", "S", "O"}, new int[] { 1, 4, 14, 1, 5})]
     [InlineData("K4[Fe(CN)6]*12H2O", 1, new string[] { "K", "Fe", "C", "N", "H", "O" }, new int[] { 4, 1, 6, 6, 24, 12 })]
     [InlineData("2K4[Fe(CN)6]*12H2O", 2, new string[] { "K", "Fe", "C", "N", "H", "O" }, new int[] { 4, 1, 6, 6, 24, 12 })] //Parser não calcula o coeficiente do composto
@@ -45,6 +48,7 @@ public class ParserFormulaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Capitalizacao")]
     public void DiferenciarMaiusculasEMinusculas()
     {
         var co = ParserFormula.Ler("CO");
@@ -69,6 +73,7 @@ public class ParserFormulaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Coeficiente")]
     public void SepararCoeficienteDosAtomos()
     {
         var composto = ParserFormula.Ler("2H2O");
@@ -86,6 +91,7 @@ public class ParserFormulaTests
     }
 
     [Theory]
+    [Trait("Categoria", "Validacao")]
     [InlineData("Fe0O3", CodigoErro.QuantidadeInvalida)]
     [InlineData("Fe1O3", CodigoErro.QuantidadeInvalida)]
     public void RejeitarFormulaInvalida(
@@ -100,6 +106,7 @@ public class ParserFormulaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Parenteses")]
     public void InterpretarFormulaComParenteses()
     {
         var composto = ParserFormula.Ler("Ca(OH)2");
@@ -116,6 +123,7 @@ public class ParserFormulaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Parenteses")]
     public void InterpretarParentesesAninhados()
     {
         var composto = ParserFormula.Ler("Al2(SO4)3");
@@ -132,6 +140,7 @@ public class ParserFormulaTests
     }
 
     [Fact]
+    [Trait("Categoria", "Parenteses")]
     public void RejeitarParentesesDesbalanceados()
     {
         var ex = Assert.Throws<DominioException>(

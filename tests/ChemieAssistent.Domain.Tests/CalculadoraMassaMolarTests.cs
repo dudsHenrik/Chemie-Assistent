@@ -11,6 +11,7 @@ public class CalculadoraMassaMolarTests
         => _calculadora.Calcular(ParserFormula.Ler(formula));
 
     [Theory]
+    [Trait("Categoria", "Calculo")]
     [InlineData("H2O", 18.015)]
     [InlineData("O2", 31.998)]
     [InlineData("CO2", 44.009)]
@@ -22,12 +23,14 @@ public class CalculadoraMassaMolarTests
         => Assert.Equal((decimal)esperado, MassaMolarDe(formula));
 
     [Fact]
+    [Trait("Categoria", "Coeficiente")]
     public void Coeficiente_do_composto_nao_altera_a_massa_molar()
     {
         Assert.Equal(MassaMolarDe("CuSO4*5H2O"), MassaMolarDe("2CuSO4*5H2O"));
     }
 
     [Fact]
+    [Trait("Categoria", "Arredondamento")]
     public void Arredonda_a_quatro_casas_com_AwayFromZero()
     {
         // 1,23445 -> 1,2345 (AwayFromZero). O arredondamento bancário daria 1,2344.
@@ -41,6 +44,7 @@ public class CalculadoraMassaMolarTests
     }
 
     [Fact]
+    [Trait("Categoria", "Validacao")]
     public void Elemento_inexistente_lanca_ElementoInexistente()
     {
         var ex = Assert.Throws<DominioException>(() => MassaMolarDe("Xx2O"));

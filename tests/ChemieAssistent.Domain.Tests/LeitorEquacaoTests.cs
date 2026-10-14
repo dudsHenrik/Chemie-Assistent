@@ -1,8 +1,11 @@
 ﻿using ChemieAssistent.Domain;
 
+namespace ChemieAssistent.Domain.Tests;
+
 public class LeitorEquacaoTests
 {
     [Fact]
+    [Trait("Categoria", "Interpretar")]
     public void EquacaoSimples()
     {
         var eq = LeitorEquacao.Ler("2H2 + O2 -> 2H2O");
@@ -13,6 +16,7 @@ public class LeitorEquacaoTests
     }
 
     [Theory]
+    [Trait("Categoria", "Validacao")]
     [InlineData("H2 + O2", CodigoErro.SetaAusente)]
     [InlineData("H2 + O2 H2O", CodigoErro.SetaAusente)]
     [InlineData("H2 -> O2 -> H2O", CodigoErro.SetaDuplicada)]

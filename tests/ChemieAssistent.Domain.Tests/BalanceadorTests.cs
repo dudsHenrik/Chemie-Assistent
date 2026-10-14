@@ -1,5 +1,7 @@
 ﻿using ChemieAssistent.Domain;
 
+namespace ChemieAssistent.Domain.Tests;
+
 public class BalanceadorTests
 {
     private static int[] Coeficientes(string texto)
@@ -9,6 +11,7 @@ public class BalanceadorTests
     }
 
     [Theory]
+    [Trait("Categoria", "Balanceamento")]
     [InlineData("C3H8 + O2 -> CO2 + H2O", new[] { 1, 5, 3, 4 })]
     [InlineData("H2 + O2 -> H2O", new[] { 2, 1, 2 })]
     [InlineData("Fe + O2 -> Fe2O3", new[] { 4, 3, 2 })]
@@ -18,6 +21,7 @@ public class BalanceadorTests
         => Assert.Equal(esperado, Coeficientes(texto));
 
     [Theory]
+    [Trait("Categoria", "Validacao")]
     [InlineData("H2 -> O2", CodigoErro.ElementosDivergentes)]
     [InlineData("H2O -> H2O2", CodigoErro.SemSolucao)]
     [InlineData("H2 + O2 -> H2O + H2O2", CodigoErro.EquacaoIndeterminada)]
