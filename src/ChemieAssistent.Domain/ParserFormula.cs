@@ -100,7 +100,7 @@ public static class ParserFormula
                     }
 
                 default:
-                    throw new DominioException(CodigoErro.FormulaVazia, $"Token inesperado: {t.Texto}");
+                    throw new DominioException(CodigoErro.CompostoInvalido, $"Token inesperado: {t.Texto}");
             }
         }
 

@@ -88,7 +88,7 @@ public sealed class Estequiometria
 
         if (entradas.Count < 2)
             throw new DominioException(CodigoErro.EntradaInvalida,
-                "Informe a massa de pelo mensos dois reagentes para identificar o limitante.");
+                "Informe a massa de pelo menos dois reagentes para identificar o limitante.");
 
         var massasMolares = todos.Select(c => _massaMolar.Calcular(c)).ToList();
         var molsInformados = new Dictionary<int, decimal>();

@@ -62,7 +62,7 @@ public static class Tokenizador
                 pos++;
 
                 if (pos >= f.Length)
-                    throw new DominioException(CodigoErro.ParentesesDesbalanceados,
+                    throw new DominioException(CodigoErro.CompostoInvalido,
                         $"Falta o hidrato depois do '*' na posição {pos}.");
 
                 if (char.IsDigit(f[pos]))
