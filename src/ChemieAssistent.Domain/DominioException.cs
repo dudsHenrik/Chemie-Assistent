@@ -7,6 +7,7 @@ public enum CodigoErro
     CompostoInvalido,
     ElementoInexistente,
     ElementosDivergentes,
+    EntradaInvalida,
     EquacaoIndeterminada,
     FormulaVazia,
     ParentesesDesbalanceados,

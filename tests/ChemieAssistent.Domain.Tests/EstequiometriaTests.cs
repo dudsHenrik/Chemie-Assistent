@@ -132,4 +132,53 @@ public class EstequiometriaTests
 
         Assert.Equal(CodigoErro.CompostoAusente, ex.Codigo);
     }
+
+    [Fact]
+    public void Identifica_o_limitante_e_o_excedente()
+    {
+        var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
+
+        var r = _estequiometria.CalcularLimitante(eq, new[]
+        {
+        new EntradaMassa(0, 88.194m, UnidadeMassa.Grama),
+        new EntradaMassa(1, 159.99m, UnidadeMassa.Grama),
+    });
+
+        Assert.Equal(1, r.IndiceLimitante);                              // O2
+        Assert.Equal(0m, r.Linhas[1].ExcedenteMols, precision: 6);
+        Assert.Equal(1m, r.Linhas[0].ExcedenteMols, precision: 6);       // sobra 1 mol de C3H8
+        Assert.Equal(44.097m, r.Linhas[0].ExcedenteGramas, precision: 3);
+        Assert.Equal(132.027m, r.Linhas[2].MassaGramas, precision: 3);   // 3 mol de CO2
+    }
+
+    [Fact]
+    public void Massa_se_conserva_no_limitante()
+    {
+        var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
+
+        var r = _estequiometria.CalcularLimitante(eq, new[]
+        {
+        new EntradaMassa(0, 88.194m, UnidadeMassa.Grama),
+        new EntradaMassa(1, 159.99m, UnidadeMassa.Grama),
+    });
+
+        decimal reagentes = r.Linhas.Where(l => l.EhReagente).Sum(l => l.MassaGramas);
+        decimal produtos = r.Linhas.Where(l => !l.EhReagente).Sum(l => l.MassaGramas);
+        Assert.Equal(reagentes, produtos, precision: 3);
+    }
+
+    [Fact]
+    public void Mistura_de_reagente_e_produto_lanca_EntradaInvalida()
+    {
+        var eq = Balanceada("C3H8 + O2 -> CO2 + H2O");
+
+        var ex = Assert.Throws<DominioException>(() =>
+            _estequiometria.CalcularLimitante(eq, new[]
+            {
+            new EntradaMassa(0, 10m, UnidadeMassa.Grama),
+            new EntradaMassa(2, 10m, UnidadeMassa.Grama),   // CO2 = produto
+            }));
+
+        Assert.Equal(CodigoErro.EntradaInvalida, ex.Codigo);
+    }
 }
