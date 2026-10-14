@@ -2,12 +2,14 @@
 
 public enum CodigoErro
 {
+    CalculoMuitoGrande,
     CaractereInvalido,
     CompostoAusente,
     CompostoInvalido,
     ElementoInexistente,
     ElementosDivergentes,
     EntradaInvalida,
+    EntradaMuitoLonga,
     EquacaoIndeterminada,
     FormulaVazia,
     ParentesesDesbalanceados,

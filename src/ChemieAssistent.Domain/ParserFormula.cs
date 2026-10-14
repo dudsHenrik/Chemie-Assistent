@@ -131,12 +131,12 @@ public static class ParserFormula
 
     private static void Somar(Dictionary<string, int> d, string simbolo, int quantidade)
     {
-        d[simbolo] = d.GetValueOrDefault(simbolo) + quantidade;
+        d[simbolo] = checked(d.GetValueOrDefault(simbolo) + quantidade);
     }
 
     private static void Mesclar(Dictionary<string, int> destino, Dictionary<string, int> origem, int fator)
     {
         foreach (var (simbolo, quantidade) in origem)
-            Somar(destino, simbolo, quantidade * fator);
+            Somar(destino, simbolo, checked(quantidade * fator));
     }
 }
