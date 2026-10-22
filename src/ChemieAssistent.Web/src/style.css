@@ -1,0 +1,233 @@
+:root {
+  --fundo: #f5f3ee;
+  --superficie: #ffffff;
+  --texto: #1f1e1b;
+  --texto-suave: #6b6860;
+  --borda: #dcd8cf;
+  --destaque: #c96442;
+  --sombra: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Tema escuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #000000;
+    --superficie: #141413;
+    --texto: #ece9e2;
+    --texto-suave: #9a968c;
+    --borda: #2e2d2a;
+    --destaque: #8957d9;
+    --sombra: 0 2px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Reset e estilos globais */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Times New Roman", serif;
+}
+
+h1 {
+  font-family: Georgia;
+  font-weight: bolder;
+  font-size: 2.4rem;
+  margin: 0 0 8px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Layout principal */
+.tela {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 18vh 20px 40px;
+  text-align: center;
+}
+
+.subtitulo {
+  color: var(--texto-suave);
+  margin-bottom: 32px;
+}
+
+/* Campo de entrada */
+.campo {
+  position: relative;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 24px;
+  box-shadow: var(--sombra);
+  text-align: left;
+}
+
+.campo:focus-within {
+  border-color: var(--destaque);
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.1rem;
+  padding: 20px 64px 56px 20px;
+}
+
+textarea::placeholder {
+  color: var(--texto-suave);
+}
+
+/* Botões e atalhos */
+#calcular {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--destaque);
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+#calcular:hover {
+  filter: brightness(1.1);
+}
+
+.atalhos {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.atalho {
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto);
+  font-size: 1.1rem;
+}
+
+.atalho:hover {
+  background: var(--borda);
+}
+
+/* Relatório e tabelas */
+#relatorio h2 {
+  font-size: 1.7rem;
+  margin: 32px 0 16px;
+}
+
+#relatorio h3 {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 28px 0 8px;
+}
+
+.tabela {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--borda);
+  text-align: left;
+}
+
+th {
+  color: var(--texto-suave);
+  font-weight: normal;
+}
+
+tr.limitante {
+  background: var(--borda);
+  font-weight: bold;
+}
+
+/* Avisos e mensagens */
+.aviso {
+  margin-top: 16px;
+  padding: 12px 64px;
+  border: 1px solid var(--destaque);
+  border-radius: 12px;
+}
+
+.erro {
+  color: #b3261e;
+}
+
+.ajuda {
+  color: var(--texto-suave);
+  margin: 0 0 12px;
+}
+
+/* Entrada de massas */
+.massas {
+  display: grid;
+  gap: 12px;
+}
+
+.massa-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(100px, 140px) 72px;
+  gap: 8px;
+  align-items: center;
+}
+
+.papel {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+/* Campos de formulário */
+input[type='number'],
+select {
+  font: inherit;
+  color: inherit;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+/* Botão de envio */
+.massas button[type="submit"] {
+  justify-self: start;
+  margin-top: 4px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--destaque);
+  color: #fff;
+  transition: background-color 0.2s, transform 0.2s;
+}

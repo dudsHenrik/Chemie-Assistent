@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chemie Assistent</title>
+  </head>
+  <body>
+    <main class="tela">
+      <h1>Chemie Assistent</h1>
+      <p class="subtitulo">Digite uma equação química para balancear e calcular.</p>
+
+      <div class="campo">
+        <textarea id="equacao" rows="2"
+          placeholder="Ex.: C3H8 + O2 → CO2 + H2O"></textarea>
+
+        <div class="atalhos">
+          <button type="button" class="atalho" data-texto=" + ">+</button>
+          <button type="button" class="atalho" data-texto="*">∗</button>
+          <button type="button" class="atalho" data-texto=" → ">→</button>
+          <button type="button" class="atalho" data-texto=" ⇌ ">⇌</button>
+        </div>
+
+        <button id="calcular" type="button" aria-label="Calcular">➤</button>
+      </div>
+
+      <section id="relatorio" hidden></section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
