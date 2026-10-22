@@ -1,4 +1,4 @@
-### Só a proporção
+### RF03 — Calcular proporção estequiométrica
 POST http://localhost:5018/api/calcular
 Content-Type: application/json
 
@@ -6,29 +6,45 @@ Content-Type: application/json
   "equacao": "C3H8 + O2 -> CO2 + H2O"
 }
 
-### Com uma massa (RF04)
-POST http://localhost:5018/api/calcular
-Content-Type: application/json
-
-{
-  "equacao": "C3H8 + O2 -> CO2 + H2O",
-  "massas": [ { "indiceComposto": 0, "valor": 88.194, "unidade": "g" } ]
-}
-
-### Reagente limitante (RF06)
+### RF04 — Calcular quantidades a partir de uma massa
 POST http://localhost:5018/api/calcular
 Content-Type: application/json
 
 {
   "equacao": "C3H8 + O2 -> CO2 + H2O",
   "massas": [
-    { "indiceComposto": 0, "valor": 88.194, "unidade": "g" },
-    { "indiceComposto": 1, "valor": 159.99, "unidade": "g" }
+    {
+      "indiceComposto": 0,
+      "valor": 88.194,
+      "unidade": "g"
+    }
   ]
 }
 
-### Erro de domínio (esperado: 400, codigo SetaAusente)
+### RF06 — Identificar o reagente limitante
 POST http://localhost:5018/api/calcular
 Content-Type: application/json
 
-{ "equacao": "H2 + O2" }
+{
+  "equacao": "C3H8 + O2 -> CO2 + H2O",
+  "massas": [
+    {
+      "indiceComposto": 0,
+      "valor": 88.194,
+      "unidade": "g"
+    },
+    {
+      "indiceComposto": 1,
+      "valor": 159.99,
+      "unidade": "g"
+    }
+  ]
+}
+
+### Validar erro de domínio — HTTP 400 (SetaAusente)
+POST http://localhost:5018/api/calcular
+Content-Type: application/json
+
+{
+  "equacao": "H2 + O2"
+}

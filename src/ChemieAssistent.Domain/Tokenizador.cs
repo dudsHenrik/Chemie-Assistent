@@ -1,4 +1,11 @@
-﻿namespace ChemieAssistent.Domain;
+﻿/*
+Converte uma fórmula química em uma sequência de tokens,
+identificando símbolos, índices, grupos, coeficientes e hidratos.
+Registra as posições dos tokens para auxiliar na interpretação
+e na identificação de entradas inválidas.
+*/
+
+namespace ChemieAssistent.Domain;
 
 public static class Tokenizador
 {

@@ -1,4 +1,10 @@
-﻿using ChemieAssistent.Domain;
+﻿/*
+Implementa o acesso aos dados dos elementos químicos no SQL Server,
+consultando o elemento pelo símbolo e convertendo o resultado em um
+objeto de domínio.
+*/
+
+using ChemieAssistent.Domain;
 using Microsoft.Data.SqlClient;
 
 namespace ChemieAssistent.Infrastructure;

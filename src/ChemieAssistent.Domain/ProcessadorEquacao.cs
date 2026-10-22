@@ -2,18 +2,22 @@
 
 namespace ChemieAssistent.Domain;
 
+// Reúne os dados do resultado estequiométrico, incluindo o balanceamento,
+// a proporção dos coeficientes, as massas molares e os cálculos solicitados.
 public sealed record RelatorioEstequiometrico(
-    Equacao Equacao,                          // já com os coeficientes balanceados
+    Equacao Equacao,
     SituacaoCoeficientes Situacao,
     IReadOnlyList<Divergencia> Divergencias,
-    IReadOnlyList<int> Proporcao,             // reagentes + produtos, na ordem da equação
-    IReadOnlyList<decimal> MassasMolares,     // mesma ordem da Proporcao
-    List<LinhaResultado>? Quantidades,        // preenchido com 1 massa informada
-    ResultadoLimitante? Limitante)            // preenchido com 2 ou mais massas
+    IReadOnlyList<int> Proporcao,             // Reagentes e produtos na ordem da equação.
+    IReadOnlyList<decimal> MassasMolares,     // Na mesma ordem da proporção.
+    List<LinhaResultado>? Quantidades,        // Resultado quando uma massa é informada.
+    ResultadoLimitante? Limitante)            // Resultado quando duas ou mais massas são informadas.
 {
     public string ProporcaoTexto => string.Join(" : ", Proporcao);
 }
 
+// Coordena a interpretação, o balanceamento e os cálculos estequiométricos
+// para produzir um relatório a partir do texto de uma equação química.
 public sealed class ProcessadorEquacao
 {
     public const int LimiteCaracteres = 500;

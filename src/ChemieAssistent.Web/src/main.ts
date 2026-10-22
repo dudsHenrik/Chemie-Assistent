@@ -6,7 +6,7 @@ import type { EntradaMassa } from './tipos';
 const campo = document.getElementById('equacao') as HTMLTextAreaElement;
 const botao = document.getElementById('calcular') as HTMLButtonElement;
 
-// ---------- Atalhos (+, →, ⇌) ----------
+// ---------- Atalhos (+, ∗, →, ⇌) ----------
 function inserirNoCursor(texto: string): void {
   campo.setRangeText(texto, campo.selectionStart, campo.selectionEnd, 'end');
   campo.focus();

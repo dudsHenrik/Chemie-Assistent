@@ -3,17 +3,18 @@ using static ChemieAssistent.Domain.Estequiometria;
 
 namespace ChemieAssistent.Api;
 
-// ---------- Entrada ----------
+// Contratos HTTP de entrada e saída.
 public sealed record EntradaMassaDto(int IndiceComposto, decimal Valor, string Unidade);
 public sealed record CalcularRequest(string? Equacao, List<EntradaMassaDto>? Massas);
 
-// ---------- Saída ----------
 public sealed record CompostoDto(int Indice, string Formula, int Coeficiente, bool EhReagente, decimal MassaMolar);
 public sealed record DivergenciaDto(int Indice, string Composto, int Digitado, int Esperado);
+
 public sealed record QuantidadeDto(
     int Indice, string Formula, bool EhReagente, decimal MassaMolar,
     decimal Mols, decimal MassaGramas,
     decimal? ExcedenteMols, decimal? ExcedenteGramas);
+
 public sealed record LimitanteDto(int IndiceLimitante, List<QuantidadeDto> Linhas);
 
 public sealed record RelatorioDto(
@@ -28,6 +29,7 @@ public sealed record RelatorioDto(
 
 public static class Mapeamento
 {
+    // Converte o DTO recebido pela API para os tipos utilizados pelo domínio.
     public static EntradaMassa ParaDominio(this EntradaMassaDto dto)
     {
         UnidadeMassa unidade = dto.Unidade?.Trim().ToLowerInvariant() switch
@@ -37,9 +39,11 @@ public static class Mapeamento
             _ => throw new DominioException(CodigoErro.EntradaInvalida,
                     $"Unidade '{dto.Unidade}' inválida. Use 'g' ou 'kg'.")
         };
+
         return new EntradaMassa(dto.IndiceComposto, dto.Valor, unidade);
     }
 
+    // Projeta o resultado do domínio para o contrato de resposta da API.
     public static RelatorioDto ParaDto(this RelatorioEstequiometrico r)
     {
         var todos = r.Equacao.Reagentes.Concat(r.Equacao.Produtos).ToList();
@@ -67,7 +71,7 @@ public static class Mapeamento
             r.ProporcaoTexto, compostos, quantidades, limitante);
     }
 
-    // Texto guarda o que foi digitado (com coeficiente); a fórmula é o resto.
+    // Remove o coeficiente estequiométrico inicial para obter a fórmula do composto.
     private static string Formula(Composto c) => c.Texto.TrimStart("0123456789".ToCharArray());
 
     private static string Lado(IEnumerable<Composto> compostos)

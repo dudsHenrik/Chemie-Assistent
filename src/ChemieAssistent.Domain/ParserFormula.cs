@@ -1,4 +1,11 @@
-﻿namespace ChemieAssistent.Domain;
+﻿/*
+Interpreta os tokens de uma fórmula química e constrói sua representação
+em termos de elementos e quantidades de átomos.
+Suporta grupos delimitados por parênteses ou colchetes, coeficientes
+e hidratos, validando a estrutura e as quantidades informadas.
+*/
+
+namespace ChemieAssistent.Domain;
 
 public static class ParserFormula
 {

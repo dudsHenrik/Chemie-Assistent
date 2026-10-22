@@ -1,4 +1,10 @@
-﻿namespace ChemieAssistent.Domain;
+﻿/*
+Representa uma fração com operações aritméticas exatas usando números
+inteiros, normalizando o sinal e simplificando pelo máximo divisor comum.
+Utiliza verificação de overflow nas operações aritméticas.
+*/
+
+namespace ChemieAssistent.Domain;
 
 public readonly record struct Fracao
 {

@@ -1,4 +1,11 @@
-﻿namespace ChemieAssistent.Domain;
+﻿/*
+Realiza cálculos estequiométricos a partir de uma equação química
+balanceada, relacionando massas, massas molares e quantidades em mol.
+Também identifica o reagente limitante e calcula o consumo,
+a formação de produtos e os excedentes dos reagentes informados.
+*/
+
+namespace ChemieAssistent.Domain;
 
 public sealed class Estequiometria
 {

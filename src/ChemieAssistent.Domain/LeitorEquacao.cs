@@ -1,4 +1,10 @@
-﻿namespace ChemieAssistent.Domain;
+﻿/*
+Interpreta o texto de uma equação química, identificando reagentes,
+produtos e reversibilidade após validar a estrutura da entrada.
+Normaliza as representações textuais das setas para um formato comum.
+*/
+
+namespace ChemieAssistent.Domain;
 
 public sealed record EquacaoTexto(List<string> Reagentes, List<string> Produtos, bool Reversivel);
 

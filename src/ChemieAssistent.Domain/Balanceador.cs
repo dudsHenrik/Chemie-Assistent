@@ -1,4 +1,11 @@
-﻿namespace  ChemieAssistent.Domain;
+﻿/*  
+Balanceia equações químicas por meio de um sistema linear homogêneo,
+resolvido pelo método de Gauss-Jordan com aritmética fracionária.
+Converte a solução em coeficientes inteiros positivos na menor
+proporção equivalente e verifica os coeficientes informados.
+*/
+
+namespace  ChemieAssistent.Domain;
 
 public static class Balanceador
 {

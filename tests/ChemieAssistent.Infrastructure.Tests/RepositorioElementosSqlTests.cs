@@ -1,5 +1,10 @@
 ﻿namespace ChemieAssistent.Infrastructure.Tests;
 
+/*
+Valida a integração do repositório com o SQL Server,
+verificando a recuperação de elementos cadastrados
+e o retorno nulo para símbolos inexistentes.
+*/
 public class RepositorioElementosSqlTests
 {
     private const string ConnectionString =
