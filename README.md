@@ -108,7 +108,7 @@ A API sobe em `http://localhost:5018`. O arquivo `ChemieAssistent.Api.http` traz
 ### 3. Front-end
 
 ```
-cd src/<pasta-do-front>
+cd src/ChemieAssistent.Web
 npm install
 npm run dev
 ```
